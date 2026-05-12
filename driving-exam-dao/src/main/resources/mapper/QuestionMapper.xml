@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.drivingexam.dao.QuestionMapper">
+    <resultMap id="BaseResultMap" type="com.drivingexam.entity.Question">
+        <id column="id" property="id"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="type" property="type"/>
+        <result column="content" property="content"/>
+        <result column="image_url" property="imageUrl"/>
+        <result column="options" property="options"/>
+        <result column="answer" property="answer"/>
+        <result column="analysis" property="analysis"/>
+        <result column="difficulty" property="difficulty"/>
+        <result column="chapter" property="chapter"/>
+        <result column="knowledge_point" property="knowledgePoint"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, category_id, type, content, image_url, options, answer, analysis, 
+        difficulty, chapter, knowledge_point, create_time, update_time
+    </sql>
+
+    <insert id="insert" parameterType="com.drivingexam.entity.Question" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO question (category_id, type, content, image_url, options, answer, analysis, 
+                             difficulty, chapter, knowledge_point, create_time, update_time)
+        VALUES (#{categoryId}, #{type}, #{content}, #{imageUrl}, #{options}, #{answer}, #{analysis},
+                COALESCE(#{difficulty}, 3), #{chapter}, #{knowledgePoint}, NOW(), NOW())
+    </insert>
+
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM question WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.drivingexam.entity.Question">
+        UPDATE question
+        <set>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="imageUrl != null">image_url = #{imageUrl},</if>
+            <if test="options != null">options = #{options},</if>
+            <if test="answer != null">answer = #{answer},</if>
+            <if test="analysis != null">analysis = #{analysis},</if>
+            <if test="difficulty != null">difficulty = #{difficulty},</if>
+            <if test="chapter != null">chapter = #{chapter},</if>
+            <if test="knowledgePoint != null">knowledge_point = #{knowledgePoint},</if>
+            update_time = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM question WHERE id = #{id}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM question ORDER BY id ASC
+    </select>
+
+    <select id="selectByCategoryId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM question WHERE category_id = #{categoryId} ORDER BY id ASC
+    </select>
+
+    <select id="selectByType" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM question WHERE type = #{type} ORDER BY id ASC
+    </select>
+
+    <select id="selectByDifficulty" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM question WHERE difficulty = #{difficulty} ORDER BY id ASC
+    </select>
+
+    <select id="selectByChapter" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM question WHERE chapter = #{chapter} ORDER BY id ASC
+    </select>
+
+    <select id="selectByKnowledgePoint" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM question WHERE knowledge_point = #{knowledgePoint} ORDER BY id ASC
+    </select>
+
+    <select id="selectRandomQuestions" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM question
+        <where>
+            <if test="categoryId != null">AND category_id = #{categoryId}</if>
+            <if test="type != null">AND type = #{type}</if>
+            <if test="difficulty != null">AND difficulty = #{difficulty}</if>
+        </where>
+        ORDER BY RAND()
+        LIMIT #{limit}
+    </select>
+
+    <select id="countByCondition" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM question
+        <where>
+            <if test="categoryId != null">AND category_id = #{categoryId}</if>
+            <if test="type != null">AND type = #{type}</if>
+            <if test="difficulty != null">AND difficulty = #{difficulty}</if>
+        </where>
+    </select>
+</mapper>

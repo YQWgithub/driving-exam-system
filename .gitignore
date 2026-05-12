@@ -1,0 +1,10 @@
+target/
+*.class
+.idea/
+*.iml
+out/
+.vscode/
+node_modules/
+dist/
+.env
+*.log

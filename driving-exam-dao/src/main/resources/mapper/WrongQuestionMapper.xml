@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.drivingexam.dao.WrongQuestionMapper">
+    <resultMap id="BaseResultMap" type="com.drivingexam.entity.WrongQuestion">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="question_id" property="questionId"/>
+        <result column="wrong_answer" property="wrongAnswer"/>
+        <result column="correct_answer" property="correctAnswer"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <resultMap id="WrongQuestionDetailMap" type="java.util.Map">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="question_id" property="questionId"/>
+        <result column="wrong_answer" property="wrongAnswer"/>
+        <result column="correct_answer" property="correctAnswer"/>
+        <result column="create_time" property="createTime"/>
+        <result column="content" property="content"/>
+        <result column="options" property="options"/>
+        <result column="answer" property="answer"/>
+        <result column="analysis" property="analysis"/>
+        <result column="chapter" property="chapter"/>
+        <result column="type" property="type"/>
+        <result column="difficulty" property="difficulty"/>
+        <result column="image_url" property="imageUrl"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.drivingexam.entity.WrongQuestion" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO wrong_question (user_id, question_id, wrong_answer, correct_answer, create_time)
+        VALUES (#{userId}, #{questionId}, #{wrongAnswer}, #{correctAnswer}, #{createTime})
+    </insert>
+
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM wrong_question WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteByUserIdAndQuestionId">
+        DELETE FROM wrong_question WHERE user_id = #{userId} AND question_id = #{questionId}
+    </delete>
+
+    <delete id="deleteByUserId" parameterType="java.lang.Integer">
+        DELETE FROM wrong_question WHERE user_id = #{userId}
+    </delete>
+
+    <update id="updateWrongAnswer" parameterType="com.drivingexam.entity.WrongQuestion">
+        UPDATE wrong_question 
+        <set>
+            <if test="wrongAnswer != null">wrong_answer = #{wrongAnswer},</if>
+            <if test="correctAnswer != null">correct_answer = #{correctAnswer},</if>
+            create_time = #{createTime}
+        </set>
+        WHERE user_id = #{userId} AND question_id = #{questionId}
+    </update>
+
+    <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT id, user_id, question_id, wrong_answer, correct_answer, create_time 
+        FROM wrong_question WHERE user_id = #{userId} ORDER BY id DESC LIMIT 50
+    </select>
+
+    <select id="selectByUserIdAndQuestionId" resultMap="BaseResultMap">
+        SELECT id, user_id, question_id, wrong_answer, correct_answer, create_time 
+        FROM wrong_question 
+        WHERE user_id = #{userId} AND question_id = #{questionId}
+        LIMIT 1
+    </select>
+
+    <select id="selectDetailByUserId" parameterType="java.lang.Integer" resultMap="WrongQuestionDetailMap">
+        SELECT w.id, w.user_id, w.question_id, w.wrong_answer, w.correct_answer,
+               DATE_FORMAT(w.create_time, '%Y-%m-%d %H:%i:%s') as create_time,
+               q.content, q.options, q.answer, q.analysis, q.chapter, q.type, q.difficulty, q.image_url
+        FROM wrong_question w
+        LEFT JOIN question q ON w.question_id = q.id
+        WHERE w.user_id = #{userId}
+        ORDER BY w.id DESC
+        LIMIT 50
+    </select>
+</mapper>

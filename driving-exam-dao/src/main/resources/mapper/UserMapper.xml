@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.drivingexam.dao.UserMapper">
+    <resultMap id="BaseResultMap" type="com.drivingexam.entity.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <result column="role" property="role"/>
+        <result column="create_time" property="createTime"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.drivingexam.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user (username, password, phone, email, role, create_time, status)
+        VALUES (#{username}, #{password}, #{phone}, #{email}, #{role}, #{createTime}, #{status})
+    </insert>
+
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM user WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.drivingexam.entity.User">
+        UPDATE user
+        <set>
+            <if test="username != null">username = #{username},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="role != null">role = #{role},</if>
+            <if test="status != null">status = #{status},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateStatus">
+        UPDATE user SET status = #{status} WHERE id = #{id}
+    </update>
+
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT * FROM user WHERE id = #{id}
+    </select>
+
+    <select id="selectByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT * FROM user WHERE username = #{username}
+    </select>
+
+    <select id="selectByPhone" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT * FROM user WHERE phone = #{phone}
+    </select>
+
+    <select id="selectByEmail" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT * FROM user WHERE email = #{email}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT * FROM user ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByRole" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT * FROM user WHERE role = #{role} ORDER BY create_time DESC
+    </select>
+</mapper>

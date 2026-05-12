@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.drivingexam.dao.SystemConfigMapper">
+    <resultMap id="BaseResultMap" type="com.drivingexam.entity.SystemConfig">
+        <id column="id" property="id"/>
+        <result column="param_key" property="paramKey"/>
+        <result column="param_value" property="paramValue"/>
+        <result column="description" property="description"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.drivingexam.entity.SystemConfig" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO system_config (param_key, param_value, description, create_time)
+        VALUES (#{paramKey}, #{paramValue}, #{description}, NOW())
+    </insert>
+
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM system_config WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.drivingexam.entity.SystemConfig">
+        UPDATE system_config
+        <set>
+            <if test="paramKey != null">param_key = #{paramKey},</if>
+            <if test="paramValue != null">param_value = #{paramValue},</if>
+            <if test="description != null">description = #{description},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT * FROM system_config WHERE id = #{id}
+    </select>
+
+    <select id="selectByKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT * FROM system_config WHERE param_key = #{paramKey}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT * FROM system_config ORDER BY id ASC
+    </select>
+</mapper>

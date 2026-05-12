@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>驾驶证模拟考试系统</title>
+    <!-- 引入Element Plus样式 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus@2.3.8/dist/index.css">
+    <!-- 引入Vue 3 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.3.4/dist/vue.global.js"></script>
+    <!-- 引入Vue Router -->
+    <script src="https://cdn.jsdelivr.net/npm/vue-router@4.2.4/dist/vue-router.global.js"></script>
+    <!-- 引入Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.4.0/dist/axios.min.js"></script>
+    <!-- 引入Element Plus -->
+    <script src="https://cdn.jsdelivr.net/npm/element-plus@2.3.8/dist/index.full.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>驾驶证模拟考试系统</h1>
+      <el-button type="primary">登录</el-button>
+      <el-button type="success">注册</el-button>
+    </div>
+    <script>
+      const { createApp } = Vue
+      const app = createApp({
+        data() {
+          return {
+            message: 'Hello Vue!'
+          }
+        }
+      })
+      app.use(ElementPlus)
+      app.mount('#app')
+    </script>
+  </body>
+</html>

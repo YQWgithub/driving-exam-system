@@ -1,0 +1,11 @@
+-- =====================================================
+-- 说明：此脚本已废弃，无需执行
+-- 
+-- 原因：所有字段已合并至 init.sql
+-- 
+-- 原修改内容：
+--   ALTER TABLE `exam_record` ADD COLUMN `total` INT(11) DEFAULT 100 COMMENT '总分' AFTER `score`;
+--   ALTER TABLE `wrong_question` ADD COLUMN `wrong_answer` VARCHAR(10) DEFAULT NULL COMMENT '错误答案' AFTER `question_id`;
+--
+-- 正式部署时只需执行 init.sql 即可创建完整表结构
+-- =====================================================
